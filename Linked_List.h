@@ -25,17 +25,17 @@ public:
 			this->push_back(arr[i]);
 		}
 	}
-	void push_back(int); // Add element to the end of the list
-	void push_front(int); // Add to the beginning of the list
+	void push_back(const int); // Add element to the end of the list
+	void push_front(const int); // Add to the beginning of the list
 	void pop_back(); // Delete last element
 	void pop_front(); // Delete first element
-	void insert(int, size_t); // Add an element by index
-	int at(size_t); // Get an element by index
-	void remove(size_t); // Delete an element by index
+	void insert(const int, const size_t); // Add an element by index
+	int at(const size_t); // Get an element by index
+	void remove(const size_t); // Delete an element by index
 	size_t get_size(); // Get size of the list
 	void print_to_console(); // Output of list elements to the console
 	void clear(); // Delete all elements of the list
-	void set(size_t, int); // Replace the element by index with the passed element
+	void set(const size_t, const int); // Replace the element by index with the passed element
 	bool isEmpty(); // Check if the list is empty
 	void push_front(LinkedList*); // Insert another list at the beginning of current list
 
@@ -54,11 +54,11 @@ int LinkedListNode::getData() {
 	return this->data;
 }
 
-void LinkedListNode::setData(int d) {
+void LinkedListNode::setData(const int d) {
 	this->data = d;
 }
 
-void LinkedList::push_back(int data) {
+void LinkedList::push_back(const int data) {
 	try {
 		LinkedListNode* new_node = new LinkedListNode(data);
 		if (this->isEmpty()) {
@@ -75,7 +75,7 @@ void LinkedList::push_back(int data) {
 	}
 }
 
-void LinkedList::push_front(int data) {
+void LinkedList::push_front(const int data) {
 	try {
 		LinkedListNode* new_node = new LinkedListNode(data);
 		if (this->isEmpty()) {
@@ -116,7 +116,7 @@ void LinkedList::pop_front() {
 	}
 }
 
-void LinkedList::insert(int data, size_t i) {
+void LinkedList::insert(const int data, const size_t i) {
 	if (this->get_size() < i + 1) {
 		throw out_of_range("Index is out of range");
 	}
@@ -139,7 +139,7 @@ void LinkedList::insert(int data, size_t i) {
 	}
 }
 
-int LinkedList::at(size_t i) {
+int LinkedList::at(const size_t i) {
 	if (this->get_size() < i + 1) {
 		throw out_of_range("Index is out of range");
 	}
@@ -157,7 +157,7 @@ int LinkedList::at(size_t i) {
 	}
 }
 
-void LinkedList::remove(size_t i) {
+void LinkedList::remove(const size_t i) {
 	if (this->get_size() < i + 1) {
 		throw out_of_range("Index is out of range");
 	}
@@ -219,7 +219,7 @@ void LinkedList::clear() {
 	}
 }
 
-void LinkedList::set(size_t i, int d) {
+void LinkedList::set(const size_t i, const int d) {
 	if (this->get_size() < i + 1) {
 		throw out_of_range("Index is out of range");
 	}
