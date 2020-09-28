@@ -1,2 +1,4 @@
 C:\Users\coolm\source\repos\Lab1_Linked_List_7\Debug\Lab1_Linked_List_7.exe
 C:\Users\coolm\source\repos\Lab1_Linked_List_7\Debug\Lab1_Linked_List_7.pdb
+C:\Users\Matvey\source\repos\MatveyIvanov\Lab1_Linked_List_7\Debug\Lab1_Linked_List_7.exe
+C:\Users\Matvey\source\repos\MatveyIvanov\Lab1_Linked_List_7\Debug\Lab1_Linked_List_7.pdb

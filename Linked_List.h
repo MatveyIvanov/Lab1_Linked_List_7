@@ -6,25 +6,36 @@ using namespace std;
 
 class LinkedListNode {
 public:
-	LinkedListNode* next; // Pointer to the next element in list
 	LinkedListNode(int d): data(d), next(NULL) {}
-	int getData();
-	void setData(int);
+	int get_data() { return this->data; }
+	void set_data(int d) { this->data = d; }
+	LinkedListNode* get_next() { return this->next; }
+
+	friend class LinkedList; // Make LinkedListNode friend of LinkedList
 private:
 	int data; // Data of the element
+	LinkedListNode* next; // Pointer to the next element in list
 };
 
 class LinkedList {
 public:
-	LinkedListNode* head; // Pointer to the head element of the list
-	LinkedListNode* last; // Pointer to the last element of the list
-	LinkedListNode* cur; // Pointer to the current element of the list
-	LinkedList(): head(NULL), last(NULL), cur(NULL) {}
+	LinkedList(): head(NULL), last(NULL), size(0) {}
 	LinkedList(int* arr, size_t n) {
 		for (size_t i = 0; i < n; i++) {
 			this->push_back(arr[i]);
 		}
+		this->size = n;
 	}
+	LinkedList(LinkedList* list) {
+		LinkedListNode* cur = list->head;
+		while (cur != NULL) {
+			this->push_back(cur->data);
+			cur = cur->next;
+		}
+		this->size = list->size;
+	}
+	LinkedListNode* get_head() { return this->head; }
+	LinkedListNode* get_last() { return this->last; }
 	void push_back(const int); // Add element to the end of the list
 	void push_front(const int); // Add to the beginning of the list
 	void pop_back(); // Delete last element
@@ -46,210 +57,12 @@ public:
 			delete this->head;
 			this->head = temp;
 		}
+		this->head = NULL;
 		this->last = this->head;
+		this->size = 0;
 	}
+private:
+	LinkedListNode* head; // Pointer to the head element of the list
+	LinkedListNode* last; // Pointer to the last element of the list
+	size_t size;
 };
-
-int LinkedListNode::getData() {
-	return this->data;
-}
-
-void LinkedListNode::setData(const int d) {
-	this->data = d;
-}
-
-void LinkedList::push_back(const int data) {
-	try {
-		LinkedListNode* new_node = new LinkedListNode(data);
-		if (this->isEmpty()) {
-			this->head = new_node;
-			this->last = this->head;
-		}
-		else {
-			this->last->next = new_node;
-			this->last = new_node;
-		}
-	}
-	catch (exception& e) {
-		cout << e.what();
-	}
-}
-
-void LinkedList::push_front(const int data) {
-	try {
-		LinkedListNode* new_node = new LinkedListNode(data);
-		if (this->isEmpty()) {
-			this->head = new_node;
-		}
-		else {
-			new_node->next = this->head;
-			this->head = new_node;
-		}
-	}
-	catch (exception& e) {
-		cout << e.what();
-	}
-}
-
-void LinkedList::pop_back() {
-	if (this->isEmpty()) {
-		throw exception("List is empty before pop");
-	}
-	else {
-		this->cur = this->head;
-		while (this->cur->next != this->last) // Searching for penultimate element to make it last
-			this->cur = this->cur->next;
-		delete this->last;
-		this->cur->next = NULL;
-		this->last = this->cur;
-	}
-}
-
-void LinkedList::pop_front() {
-	if (this->isEmpty()) {
-		throw exception("List is empty before pop");
-	}
-	else {
-		LinkedListNode* temp = this->head->next;
-		delete this->head;
-		this->head = temp;
-	}
-}
-
-void LinkedList::insert(const int data, const size_t i) {
-	if (this->get_size() < i + 1) {
-		throw out_of_range("Index is out of range");
-	}
-	else if (i == 0) {
-		this->push_front(data);
-	}
-	else {
-		size_t temp_index = 0;
-		LinkedListNode* new_node = new LinkedListNode(data);
-		this->cur = this->head;
-		while (temp_index != i - 1) { // Searching for i - 1 element. Then insert new element after it
-			temp_index++;
-			this->cur = this->cur->next;
-		}
-		LinkedListNode* temp = this->cur->next;
-		this->cur->next = new_node;
-		new_node->next = temp;
-		if (new_node->next == NULL)
-			this->last = new_node;
-	}
-}
-
-int LinkedList::at(const size_t i) {
-	if (this->get_size() < i + 1) {
-		throw out_of_range("Index is out of range");
-	}
-	else if (i == 0) {
-		return this->head->getData();
-	}
-	else {
-		this->cur = this->head;
-		size_t temp_index = 0;
-		while (temp_index != i) { // Searching for i element
-			temp_index++;
-			this->cur = this->cur->next;
-		}
-		return this->cur->getData();
-	}
-}
-
-void LinkedList::remove(const size_t i) {
-	if (this->get_size() < i + 1) {
-		throw out_of_range("Index is out of range");
-	}
-	else if (i == 0) {
-		this->pop_front();
-	}
-	else {
-		size_t temp_index = 0;
-		this->cur = this->head;
-		while (temp_index != i - 1) { // Searching for i - 1 element
-			temp_index++;
-			this->cur = this->cur->next;
-		}
-		if (this->cur->next->next == NULL) { // If i element is last
-			this->pop_back();
-		}
-		else {
-			LinkedListNode* temp = this->cur->next;
-			this->cur->next = this->cur->next->next;
-			delete temp;
-		}
-	}
-}
-
-size_t LinkedList::get_size() {
-	if (this->isEmpty())
-		return 0;
-	else {
-		this->cur = this->head;
-		size_t size = 1;
-		while (this->cur->next != NULL) {
-			size++;
-			this->cur = this->cur->next;
-		}
-		return size;
-	}
-}
-
-void LinkedList::print_to_console() {
-	if (this->isEmpty()) {
-		throw exception("List is empty");
-	}
-	else {
-		this->cur = this->head;
-		while (this->cur != NULL) {
-			cout << this->cur->getData() << ' ';
-			this->cur = this->cur->next;
-		}
-		cout << endl;
-	}
-}
-
-void LinkedList::clear() {
-	if (this->isEmpty()) {
-		return;
-	}
-	else {
-		this->~LinkedList();
-	}
-}
-
-void LinkedList::set(const size_t i, const int d) {
-	if (this->get_size() < i + 1) {
-		throw out_of_range("Index is out of range");
-	}
-	else {
-		size_t temp_index = 0;
-		this->cur = this->head;
-		while (temp_index != i) { // Searching for i element to change his data
-			temp_index++;
-			this->cur = this->cur->next;
-		}
-		this->cur->setData(d);
-	}
-}
-
-bool LinkedList::isEmpty() {
-	if (this->head == NULL)
-		return true;
-	else
-		return false;
-}
-
-void LinkedList::push_front(LinkedList* list) {
-	if (this->isEmpty()) {
-		this->head = list->head;
-	}
-	else if (list->isEmpty()) {
-		throw exception("List you want to insert is empty");
-	}
-	else {
-		list->last->next = this->head;
-		this->head = list->head;
-	}
-}
